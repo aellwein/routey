@@ -39,13 +39,6 @@ public class RouteyInitializer implements ServletContainerInitializer {
 			LOGGER.error("RouteyServlet was already registered in the current ServletContext.");
 			return;
 		}
-		final Set<String> mapping = servlet.addMapping(DEFAULT_MAPPING);
-		if (!mapping.contains(DEFAULT_MAPPING)) {
-			LOGGER.error("Unable to add default mapping for Routey servlet.");
-		} else {
-			LOGGER.info(ROUTEY_SERVLET_NAME
-					+ " was succesfully registered for mapping \""
-					+ DEFAULT_MAPPING + "\"");
-		}
+		servlet.addMapping(DEFAULT_MAPPING);
 	}
 }
