@@ -5,11 +5,14 @@
    <groupId>net.ellwein.routey</groupId>
    <artifactId>routey</artifactId>
    <version>1.0.0-SNAPSHOT</version>
+   <packaging>pom</packaging>
+
    <name>Routey :: Lightweight Servlet Dispatcher/Router</name>
 
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <servlet.api.version>3.0.1</servlet.api.version>
+      <slf4j.version>1.7.5</slf4j.version>
    </properties>
 
    <build>
@@ -36,16 +39,17 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet.api.version}</version>
          </dependency>
+         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+         </dependency>
       </dependencies>
    </dependencyManagement>
 
+   <modules>
+      <module>routey-core</module>
+      <module>routey-init</module>
+   </modules>
 
-   <dependencies>
-      <dependency>
-         <groupId>javax.servlet</groupId>
-         <artifactId>javax.servlet-api</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      
-   </dependencies>
 </project>

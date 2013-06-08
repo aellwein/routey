@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <artifactId>routey-init</artifactId>
+
+   <parent>
+      <groupId>net.ellwein.routey</groupId>
+      <artifactId>routey</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+   </parent>
+
+   <name>Routey :: Init</name>
+   <description>Servlet Context Initializer for Routey. This JAR is thought as a helper which can be added to a project in order to give Routey control over all request routing in the application.</description>
+
+   <dependencies>
+      <dependency>
+         <groupId>javax.servlet</groupId>
+         <artifactId>javax.servlet-api</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>net.ellwein.routey</groupId>
+         <artifactId>routey-core</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+      </dependency>
+   </dependencies>
+
+</project>
