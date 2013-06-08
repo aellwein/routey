@@ -50,6 +50,7 @@
    <modules>
       <module>routey-core</module>
       <module>routey-init</module>
+      <module>routey-example</module>
    </modules>
 
 </project>
