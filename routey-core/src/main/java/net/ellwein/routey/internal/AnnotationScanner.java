@@ -1,4 +1,4 @@
-package net.ellwein.routey.core;
+package net.ellwein.routey.internal;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+/**
+ * Helper class for annotation scaning.
+ * 
+ * @author Alexander Ellwein
+ * @since 1.0.0
+ */
 public final class AnnotationScanner {
 
 	private AnnotationScanner() {
