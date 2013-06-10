@@ -1,6 +1,7 @@
 package net.ellwein.routey.core;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,8 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.ellwein.routey.annotations.Mapping;
 import net.ellwein.routey.annotations.RequestMethod;
-import net.ellwein.routey.core.AnnotationScanner.AnnotationScannerNotifier;
 import net.ellwein.routey.core.extensions.RouteyPackageScanner;
+import net.ellwein.routey.internal.AnnotationScanner;
+import net.ellwein.routey.internal.AnnotationScanner.AnnotationScannerNotifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +31,8 @@ import org.slf4j.LoggerFactory;
  * @since 1.0.0
  */
 public final class RouteyServlet extends HttpServlet {
-
-	private static final long serialVersionUID = 1L;
 	private static final transient Logger LOGGER = LoggerFactory.getLogger(RouteyServlet.class);
+	private static final long serialVersionUID = 1L;
 
 	private final Map<String, Object> initializedControllers = new HashMap<String, Object>();
 
@@ -55,7 +56,13 @@ public final class RouteyServlet extends HttpServlet {
 		}
 	}
 
-	private void scanMappingAnnotations() throws IOException, ClassNotFoundException {
+	/**
+	 * 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	void scanMappingAnnotations() throws IOException, ClassNotFoundException {
+		// TODO: refactor this method!
 		for (final String aPackage : findPackagesToScan()) {
 			AnnotationScanner.scanPackage(aPackage, Mapping.class, new AnnotationScannerNotifier() {
 
@@ -77,7 +84,13 @@ public final class RouteyServlet extends HttpServlet {
 					}
 					for (final String requestUri : mapping.value()) {
 						if (!initializedControllers.containsKey(classFound.getName())) {
-							final Object controller = classFound.newInstance(); // TODO
+							Object controller;
+							try {
+								controller = classFound.newInstance();
+							} catch (InstantiationException | IllegalAccessException e) {
+								LOGGER.error("unable to instantiate class " + classFound.getName() + " - maybe missing public default constructor? ", e);
+								throw new IllegalStateException(e);
+							}
 							initializedControllers.put(classFound.getName(), controller);
 						}
 						for (final RequestMethod reqMethod : methods) {
@@ -132,6 +145,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doDelete()");
 		final Routing routing = requestMappingsForDELETE.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -144,6 +158,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doGet()");
 		final Routing routing = requestMappingsForGET.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -156,6 +171,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doHead()");
 		final Routing routing = requestMappingsForHEAD.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -169,6 +185,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doOptions()");
 		final Routing routing = requestMappingsForOPTIONS.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -182,6 +199,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doPost()");
 		final Routing routing = requestMappingsForPOST.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -194,6 +212,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doPut()");
 		final Routing routing = requestMappingsForPUT.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -207,6 +226,7 @@ public final class RouteyServlet extends HttpServlet {
 		LOGGER.debug("doTrace()");
 		final Routing routing = requestMappingsForTRACE.get(req.getRequestURI());
 		if (routing != null) {
+			LOGGER.debug("found a route for request URI \"" + req.getRequestURI() + "\": " + routing.toString());
 			mapArgsForRoutingAndInvoke(req, resp, routing);
 		} else {
 			// default handling
@@ -215,7 +235,11 @@ public final class RouteyServlet extends HttpServlet {
 
 	}
 
-	protected List<String> findPackagesToScan() {
+	/**
+	 * 
+	 * @return
+	 */
+	List<String> findPackagesToScan() {
 		LOGGER.debug("findPackagesToScan()");
 		final List<String> result = new ArrayList<String>();
 
@@ -233,7 +257,33 @@ public final class RouteyServlet extends HttpServlet {
 		return result;
 	}
 
-	protected void mapArgsForRoutingAndInvoke(final HttpServletRequest req, final HttpServletResponse resp, final Routing routing) {
-
+	/**
+	 * 
+	 * @param req
+	 * @param resp
+	 * @param routing
+	 */
+	void mapArgsForRoutingAndInvoke(final HttpServletRequest req, final HttpServletResponse resp, final Routing routing) {
+		final List<Object> callArgs = new ArrayList<Object>();
+		final Method methodToCall = routing.getMappedMethod();
+		final Class<?>[] methodParameterTypes = methodToCall.getParameterTypes();
+		for (final Class<?> clazz : methodParameterTypes) {
+			if (clazz.isAssignableFrom(HttpServletRequest.class)) {
+				callArgs.add(req);
+				continue;
+			}
+			if (clazz.isAssignableFrom(HttpServletResponse.class)) {
+				callArgs.add(resp);
+				continue;
+			}
+			// for all not recognized types, inject null
+			callArgs.add(null);
+		}
+		try {
+			methodToCall.invoke(routing.getController(), callArgs.toArray());
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			LOGGER.error("unable to invoke method " + methodToCall.getName() + " :", e);
+			throw new RuntimeException(e);
+		}
 	}
 }
