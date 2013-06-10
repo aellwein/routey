@@ -41,7 +41,10 @@ public class RegexLookupMap<K, V> extends HashMap<K, V> {
 			throw new IllegalArgumentException("key may not be null");
 		}
 		final Pattern p = Pattern.compile(key.toString());
-		patternList.add(p);
+		if (!patternList.contains(p)) {
+			patternList.add(p);
+			valuesList.add(value);
+		}
 		return value;
 	}
 
