@@ -1,5 +1,5 @@
 /**
- * Internal classes for Routey.
+ * Internal classes for Routey. Not for public use.
  * 
  * @author Alexander Ellwein
  */
