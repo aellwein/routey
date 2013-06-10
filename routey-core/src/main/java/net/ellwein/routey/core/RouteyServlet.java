@@ -20,6 +20,7 @@ import net.ellwein.routey.annotations.RequestMethod;
 import net.ellwein.routey.core.extensions.RouteyPackageScanner;
 import net.ellwein.routey.internal.AnnotationScanner;
 import net.ellwein.routey.internal.AnnotationScanner.AnnotationScannerNotifier;
+import net.ellwein.routey.internal.RegexLookupMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,13 +37,13 @@ public final class RouteyServlet extends HttpServlet {
 
 	private final Map<String, Object> initializedControllers = new HashMap<String, Object>();
 
-	private final Map<String, Routing> requestMappingsForGET = new HashMap<String, Routing>();
-	private final Map<String, Routing> requestMappingsForPOST = new HashMap<String, Routing>();
-	private final Map<String, Routing> requestMappingsForDELETE = new HashMap<String, Routing>();
-	private final Map<String, Routing> requestMappingsForHEAD = new HashMap<String, Routing>();
-	private final Map<String, Routing> requestMappingsForPUT = new HashMap<String, Routing>();
-	private final Map<String, Routing> requestMappingsForTRACE = new HashMap<String, Routing>();
-	private final Map<String, Routing> requestMappingsForOPTIONS = new HashMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForGET = new RegexLookupMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForPOST = new RegexLookupMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForDELETE = new RegexLookupMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForHEAD = new RegexLookupMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForPUT = new RegexLookupMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForTRACE = new RegexLookupMap<String, Routing>();
+	private final Map<String, Routing> requestMappingsForOPTIONS = new RegexLookupMap<String, Routing>();
 
 	@Override
 	public void init() throws ServletException {
