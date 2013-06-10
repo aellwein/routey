@@ -40,7 +40,7 @@ public final class AnnotationScanner {
 	 * @return The classes
 	 * @throws ClassNotFoundException
 	 */
-	protected static List<Class<?>> findClasses(final File directory, final String packageName) throws ClassNotFoundException {
+	static List<Class<?>> findClasses(final File directory, final String packageName) throws ClassNotFoundException {
 		final List<Class<?>> classes = new ArrayList<Class<?>>();
 		if (!directory.exists()) {
 			return classes;
@@ -66,7 +66,7 @@ public final class AnnotationScanner {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	protected static Iterable<Class<?>> getClasses(final String packageName) throws ClassNotFoundException, IOException {
+	static Iterable<Class<?>> getClasses(final String packageName) throws ClassNotFoundException, IOException {
 		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		final String path = packageName.replace('.', '/');
 		final Enumeration<URL> resources = classLoader.getResources(path);
