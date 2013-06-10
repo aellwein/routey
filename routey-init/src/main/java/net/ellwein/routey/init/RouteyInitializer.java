@@ -24,17 +24,14 @@ public class RouteyInitializer implements ServletContainerInitializer {
 
 	private static final String DEFAULT_MAPPING = "/*";
 	private static final String ROUTEY_SERVLET_NAME = "RouteyServlet";
-	private static final transient Logger LOGGER = LoggerFactory
-			.getLogger(RouteyInitializer.class);
+	private static final transient Logger LOGGER = LoggerFactory.getLogger(RouteyInitializer.class);
 
 	@Override
-	public void onStartup(final Set<Class<?>> c, final ServletContext ctx)
-			throws ServletException {
+	public void onStartup(final Set<Class<?>> c, final ServletContext ctx) throws ServletException {
 
 		LOGGER.debug("onStartup() called");
 
-		final Dynamic servlet = ctx.addServlet(ROUTEY_SERVLET_NAME,
-				RouteyServlet.class);
+		final Dynamic servlet = ctx.addServlet(ROUTEY_SERVLET_NAME, RouteyServlet.class);
 		if (servlet == null) {
 			LOGGER.error("RouteyServlet was already registered in the current ServletContext.");
 			return;

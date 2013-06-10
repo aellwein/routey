@@ -23,10 +23,8 @@ public class Routing {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((controller == null) ? 0 : controller.hashCode());
-		result = prime * result
-				+ ((mappedMethod == null) ? 0 : mappedMethod.hashCode());
+		result = prime * result + ((controller == null) ? 0 : controller.hashCode());
+		result = prime * result + ((mappedMethod == null) ? 0 : mappedMethod.hashCode());
 		return result;
 	}
 
@@ -61,8 +59,7 @@ public class Routing {
 
 	@Override
 	public String toString() {
-		return "Routing [controller=" + controller + ", mappedMethod="
-				+ mappedMethod + "]";
+		return "Routing [controller=" + controller + ", mappedMethod=" + mappedMethod + "]";
 	}
 
 }

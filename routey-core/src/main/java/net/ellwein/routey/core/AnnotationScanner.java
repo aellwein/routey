@@ -15,18 +15,14 @@ public final class AnnotationScanner {
 	}
 
 	public interface AnnotationScannerNotifier {
-		void foundClass(String packageName, Class<?> classFound,
-				Method methodFound);
+		void foundClass(String packageName, Class<?> classFound, Method methodFound);
 	}
 
-	public static void scanPackage(final String packageName,
-			final Class<? extends Annotation> annotationToScanFor,
-			final AnnotationScannerNotifier notifier) throws IOException,
-			ClassNotFoundException {
+	public static void scanPackage(final String packageName, final Class<? extends Annotation> annotationToScanFor, final AnnotationScannerNotifier notifier)
+			throws IOException, ClassNotFoundException {
 		for (final Class<?> clazz : getClasses(packageName)) {
 			for (final Method method : clazz.getDeclaredMethods()) {
-				if (method.isAnnotationPresent(annotationToScanFor)
-						&& notifier != null) {
+				if (method.isAnnotationPresent(annotationToScanFor) && notifier != null) {
 					notifier.foundClass(packageName, clazz, method);
 				}
 			}
@@ -44,8 +40,7 @@ public final class AnnotationScanner {
 	 * @return The classes
 	 * @throws ClassNotFoundException
 	 */
-	protected static List<Class<?>> findClasses(final File directory,
-			final String packageName) throws ClassNotFoundException {
+	protected static List<Class<?>> findClasses(final File directory, final String packageName) throws ClassNotFoundException {
 		final List<Class<?>> classes = new ArrayList<Class<?>>();
 		if (!directory.exists()) {
 			return classes;
@@ -53,13 +48,9 @@ public final class AnnotationScanner {
 		final File[] files = directory.listFiles();
 		for (final File file : files) {
 			if (file.isDirectory()) {
-				classes.addAll(findClasses(file,
-						packageName + "." + file.getName()));
+				classes.addAll(findClasses(file, packageName + "." + file.getName()));
 			} else if (file.getName().endsWith(".class")) {
-				classes.add(Class.forName(packageName
-						+ '.'
-						+ file.getName().substring(0,
-								file.getName().length() - 6)));
+				classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
 			}
 		}
 		return classes;
@@ -75,10 +66,8 @@ public final class AnnotationScanner {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	protected static Iterable<Class<?>> getClasses(final String packageName)
-			throws ClassNotFoundException, IOException {
-		final ClassLoader classLoader = Thread.currentThread()
-				.getContextClassLoader();
+	protected static Iterable<Class<?>> getClasses(final String packageName) throws ClassNotFoundException, IOException {
+		final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		final String path = packageName.replace('.', '/');
 		final Enumeration<URL> resources = classLoader.getResources(path);
 		final List<File> dirs = new ArrayList<File>();
