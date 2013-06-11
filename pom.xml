@@ -53,4 +53,10 @@
       <module>routey-example</module>
    </modules>
 
+   <url>https://github.com/aellwein/routey</url>
+   <scm>
+      <connection>scm:git:git://github.com/aellwein/routey.git</connection>
+      <developerConnection>scm:git:git://github.com/aellwein/routey.git</developerConnection>
+      <url>git://github.com/aellwein/routey.git</url>
+   </scm>
 </project>
