@@ -38,10 +38,28 @@
          <groupId>ch.qos.logback</groupId>
          <artifactId>logback-classic</artifactId>
       </dependency>
+      <dependency>
+         <groupId>org.mockito</groupId>
+         <artifactId>mockito-all</artifactId>
+         <scope>test</scope>
+      </dependency>
    </dependencies>
 
    <build>
       <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>test</id>
+                  <phase>test</phase>
+                  <goals>
+                     <goal>test</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
          <plugin>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-maven-plugin</artifactId>
@@ -53,7 +71,7 @@
                   <id>start-jetty</id>
                   <phase>test-compile</phase>
                   <goals>
-                     <goal>deploy-war</goal>
+                     <goal>start</goal>
                   </goals>
                </execution>
                <execution>
