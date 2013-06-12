@@ -10,7 +10,7 @@
 
    <artifactId>routey-example</artifactId>
    <packaging>war</packaging>
-   <name>Routey :: example project</name>
+   <name>Routey :: Example Project</name>
 
 
    <build>
@@ -30,7 +30,6 @@
          <plugin>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-maven-plugin</artifactId>
-            <version>9.0.0.M5</version>
             <configuration>
                <reload>manual</reload>
             </configuration>
@@ -51,12 +50,10 @@
       <dependency>
          <groupId>com.google.guava</groupId>
          <artifactId>guava</artifactId>
-         <version>14.0.1</version>
       </dependency>
       <dependency>
          <groupId>ch.qos.logback</groupId>
          <artifactId>logback-classic</artifactId>
-         <version>1.0.13</version>
       </dependency>
    </dependencies>
 
