@@ -11,12 +11,13 @@ import org.slf4j.LoggerFactory;
 
 public class MyController {
 
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(MyController.class);
+	private static final transient Logger	LOGGER	= LoggerFactory.getLogger( MyController.class );
 
-	@Mapping(value = { "/.*" }, method = { RequestMethod.GET, RequestMethod.POST })
-	public void index(final HttpServletRequest request, final HttpServletResponse response) {
-		LOGGER.info("index()");
-		LOGGER.info("Request: " + request);
-		LOGGER.info("Response: " + response);
+	@Mapping( value = { "/testme" }, method = { RequestMethod.GET, RequestMethod.POST } )
+	public void index( final HttpServletRequest request, final HttpServletResponse response ) {
+		LOGGER.info( "index()" );
+		LOGGER.info( "Request: " + request );
+		LOGGER.info( "Response: " + response );
 	}
+
 }

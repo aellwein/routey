@@ -12,17 +12,22 @@ import com.eclipsesource.restfuse.Response;
 import com.eclipsesource.restfuse.annotation.Context;
 import com.eclipsesource.restfuse.annotation.HttpTest;
 
-@RunWith(HttpJUnitRunner.class)
-public class SimpleTest {
+@RunWith( HttpJUnitRunner.class )
+public class MappingIT {
 
 	@Rule
-	public Destination destination = new Destination(this, "http://localhost:8080");
+	public Destination	destination	= new Destination( this, "http://localhost:9090/routey-integration-tests" );
 
 	@Context
-	Response response;
+	Response			response;
 
-	@HttpTest(method = Method.GET, path = "/testme")
+	@HttpTest( method = Method.GET, path = "/testme" )
 	public void reachTestController() throws Exception {
-		assertOk(response);
+		assertNoContent( response );
+	}
+
+	@HttpTest( method = Method.GET, path = "/testme/" )
+	public void reachTestController2() throws Exception {
+		assertNoContent( response );
 	}
 }

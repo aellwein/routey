@@ -33,6 +33,7 @@
       <dependency>
          <groupId>com.google.guava</groupId>
          <artifactId>guava</artifactId>
+         <scope>compile</scope>
       </dependency>
       <dependency>
          <groupId>ch.qos.logback</groupId>
@@ -50,39 +51,57 @@
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <excludes>
+                  <exclude>**/**</exclude>
+               </excludes>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
             <executions>
                <execution>
-                  <id>test</id>
-                  <phase>test</phase>
+                  <id>run-integration-tests</id>
+                  <phase>integration-test</phase>
                   <goals>
-                     <goal>test</goal>
+                     <goal>integration-test</goal>
                   </goals>
+                  <inherited>false</inherited>
+                  <configuration>
+                     <includes>
+                        <include>**/net/ellwein/routey/itests/**.java</include>
+                     </includes>
+                  </configuration>
                </execution>
             </executions>
          </plugin>
          <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <configuration>
-               <reload>manual</reload>
-            </configuration>
+            <groupId>org.apache.tomcat.maven</groupId>
+            <artifactId>tomcat7-maven-plugin</artifactId>
             <executions>
                <execution>
-                  <id>start-jetty</id>
-                  <phase>test-compile</phase>
+                  <id>start-tomcat</id>
+                  <phase>pre-integration-test</phase>
                   <goals>
-                     <goal>start</goal>
+                     <goal>run</goal>
                   </goals>
+                  <configuration>
+                     <port>9090</port>
+                     <fork>true</fork>
+                     <systemProperties>
+                     </systemProperties>
+                  </configuration>
                </execution>
                <execution>
-                  <id>stop-jetty</id>
-                  <phase>verify</phase>
+                  <id>stop-tomcat</id>
+                  <phase>post-integration-test</phase>
                   <goals>
-                     <goal>stop</goal>
+                     <goal>shutdown</goal>
                   </goals>
                </execution>
             </executions>
-         </plugin>
+         </plugin>         
       </plugins>
    </build>
 </project>
