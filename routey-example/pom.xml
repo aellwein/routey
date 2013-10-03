@@ -21,7 +21,7 @@
                <artifactId>maven-war-plugin</artifactId>
                <configuration>
                   <failOnMissingWebXml>false</failOnMissingWebXml>
-                 <webappDirectory>${project.build.directory}/routey-example</webappDirectory>
+                  <webappDirectory>${project.build.directory}/routey-example</webappDirectory>
                </configuration>
             </plugin>
          </plugins>
