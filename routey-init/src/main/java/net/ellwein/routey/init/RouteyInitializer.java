@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRegistration.Dynamic;
 
 import net.ellwein.routey.core.RouteyServlet;
@@ -22,20 +23,26 @@ import org.slf4j.LoggerFactory;
  */
 public class RouteyInitializer implements ServletContainerInitializer {
 
-	private static final String DEFAULT_MAPPING = "/*";
-	private static final String ROUTEY_SERVLET_NAME = "RouteyServlet";
-	private static final transient Logger LOGGER = LoggerFactory.getLogger(RouteyInitializer.class);
+	private static final String				DEFAULT_MAPPING		= "/*";
+	private static final String				ROUTEY_SERVLET_NAME	= "RouteyServlet";
+	private static final transient Logger	LOGGER				= LoggerFactory.getLogger( RouteyInitializer.class );
 
 	@Override
-	public void onStartup(final Set<Class<?>> c, final ServletContext ctx) throws ServletException {
+	public void onStartup( final Set<Class<?>> c, final ServletContext ctx ) throws ServletException {
 
-		LOGGER.debug("onStartup() called");
+		LOGGER.debug( "onStartup() called" );
 
-		final Dynamic servlet = ctx.addServlet(ROUTEY_SERVLET_NAME, RouteyServlet.class);
-		if (servlet == null) {
-			LOGGER.error("RouteyServlet was already registered in the current ServletContext.");
-			return;
+		final ServletRegistration servletRegistration = ctx.getServletRegistration( ROUTEY_SERVLET_NAME );
+		// if servlet not registered already
+		if ( servletRegistration == null ) {
+			final RouteyServlet routeyServlet = ctx.createServlet( RouteyServlet.class );
+
+			// force eager initialization to scan routes early
+			routeyServlet.init();
+
+			final Dynamic servlet = ctx.addServlet( ROUTEY_SERVLET_NAME, routeyServlet );
+			servlet.addMapping( DEFAULT_MAPPING );
 		}
-		servlet.addMapping(DEFAULT_MAPPING);
+
 	}
 }
